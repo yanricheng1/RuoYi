@@ -25,7 +25,7 @@
         <kaptcha.version>2.3.3</kaptcha.version>
         <swagger.version>3.0.0</swagger.version>
         <pagehelper.boot.version>1.4.7</pagehelper.boot.version>
-        <fastjson.version>1.2.83</fastjson.version>
+        <fastjson.version>2.0.57</fastjson.version>
         <oshi.version>6.8.1</oshi.version>
         <commons.io.version>2.19.0</commons.io.version>
         <poi.version>4.1.2</poi.version>
@@ -229,6 +229,12 @@
                 <version>${ruoyi.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>ruoyi-workflow</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -239,11 +245,17 @@
         <module>ruoyi-quartz</module>
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
+        <module>ruoyi-workflow</module>
     </modules>
     <packaging>pom</packaging>
 
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
 
     </dependencies>
 

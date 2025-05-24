@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改流程实例')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-instance-edit" th:object="${seProcessInstance}">
+            <input name="id" th:field="*{id}" type="hidden">
+
+
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">原因：</label>
+                    <div class="col-sm-8">
+                        <input name="reason" th:field="*{reason}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">备注：</label>
+                    <div class="col-sm-8">
+                        <input name="comment" th:field="*{comment}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">标题：</label>
+                    <div class="col-sm-8">
+                        <input name="title" th:field="*{title}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">tag：</label>
+                    <div class="col-sm-8">
+                        <input name="tag" th:field="*{tag}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">状态：</label>
+                    <div class="col-sm-8">
+                        <input name="tag" th:field="*{status}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "workflow/processInstance";
+        $("#form-instance-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-instance-edit').serialize());
+            }
+        }
+
+        $("input[name='gmtCreate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='gmtModified']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

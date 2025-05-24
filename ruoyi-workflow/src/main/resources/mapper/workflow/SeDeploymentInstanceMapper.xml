@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.workflow.mapper.SeDeploymentInstanceMapper">
+    
+    <resultMap type="com.ruoyi.workflow.domain.SeDeploymentInstance" id="SeDeploymentInstanceResult">
+        <result property="id"    column="id"    />
+        <result property="gmtCreate"    column="gmt_create"    />
+        <result property="gmtModified"    column="gmt_modified"    />
+        <result property="processDefinitionId"    column="process_definition_id"    />
+        <result property="processDefinitionVersion"    column="process_definition_version"    />
+        <result property="processDefinitionType"    column="process_definition_type"    />
+        <result property="processDefinitionCode"    column="process_definition_code"    />
+        <result property="processDefinitionName"    column="process_definition_name"    />
+        <result property="processDefinitionDesc"    column="process_definition_desc"    />
+        <result property="processDefinitionContent"    column="process_definition_content"    />
+        <result property="deploymentUserId"    column="deployment_user_id"    />
+        <result property="deploymentStatus"    column="deployment_status"    />
+        <result property="logicStatus"    column="logic_status"    />
+        <result property="tenantId"    column="tenant_id"    />
+    </resultMap>
+
+    <sql id="selectSeDeploymentInstanceVo">
+        select id, gmt_create, gmt_modified, process_definition_id, process_definition_version, process_definition_type, process_definition_code, process_definition_name, process_definition_desc, process_definition_content, deployment_user_id, deployment_status, logic_status, tenant_id from se_deployment_instance
+    </sql>
+
+    <select id="selectSeDeploymentInstanceList" parameterType="com.ruoyi.workflow.domain.SeDeploymentInstance" resultMap="SeDeploymentInstanceResult">
+        <include refid="selectSeDeploymentInstanceVo"/>
+        <where>  
+            <if test="gmtCreate != null "> and gmt_create = #{gmtCreate}</if>
+            <if test="gmtModified != null "> and gmt_modified = #{gmtModified}</if>
+            <if test="processDefinitionId != null  and processDefinitionId != ''"> and process_definition_id = #{processDefinitionId}</if>
+            <if test="processDefinitionVersion != null  and processDefinitionVersion != ''"> and process_definition_version = #{processDefinitionVersion}</if>
+            <if test="processDefinitionType != null  and processDefinitionType != ''"> and process_definition_type = #{processDefinitionType}</if>
+            <if test="processDefinitionCode != null  and processDefinitionCode != ''"> and process_definition_code = #{processDefinitionCode}</if>
+            <if test="processDefinitionName != null  and processDefinitionName != ''"> and process_definition_name like concat('%', #{processDefinitionName}, '%')</if>
+            <if test="processDefinitionDesc != null  and processDefinitionDesc != ''"> and process_definition_desc = #{processDefinitionDesc}</if>
+            <if test="processDefinitionContent != null  and processDefinitionContent != ''"> and process_definition_content = #{processDefinitionContent}</if>
+            <if test="deploymentUserId != null  and deploymentUserId != ''"> and deployment_user_id = #{deploymentUserId}</if>
+            <if test="deploymentStatus != null  and deploymentStatus != ''"> and deployment_status = #{deploymentStatus}</if>
+            <if test="logicStatus != null  and logicStatus != ''"> and logic_status = #{logicStatus}</if>
+            <if test="tenantId != null  and tenantId != ''"> and tenant_id = #{tenantId}</if>
+        </where>
+    </select>
+    
+    <select id="selectSeDeploymentInstanceById" parameterType="String" resultMap="SeDeploymentInstanceResult">
+        <include refid="selectSeDeploymentInstanceVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSeDeploymentInstance" parameterType="com.ruoyi.workflow.domain.SeDeploymentInstance" useGeneratedKeys="true" keyProperty="id">
+        insert into se_deployment_instance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="gmtCreate != null">gmt_create,</if>
+            <if test="gmtModified != null">gmt_modified,</if>
+            <if test="processDefinitionId != null and processDefinitionId != ''">process_definition_id,</if>
+            <if test="processDefinitionVersion != null">process_definition_version,</if>
+            <if test="processDefinitionType != null">process_definition_type,</if>
+            <if test="processDefinitionCode != null">process_definition_code,</if>
+            <if test="processDefinitionName != null">process_definition_name,</if>
+            <if test="processDefinitionDesc != null">process_definition_desc,</if>
+            <if test="processDefinitionContent != null and processDefinitionContent != ''">process_definition_content,</if>
+            <if test="deploymentUserId != null and deploymentUserId != ''">deployment_user_id,</if>
+            <if test="deploymentStatus != null and deploymentStatus != ''">deployment_status,</if>
+            <if test="logicStatus != null and logicStatus != ''">logic_status,</if>
+            <if test="tenantId != null">tenant_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="gmtCreate != null">#{gmtCreate},</if>
+            <if test="gmtModified != null">#{gmtModified},</if>
+            <if test="processDefinitionId != null and processDefinitionId != ''">#{processDefinitionId},</if>
+            <if test="processDefinitionVersion != null">#{processDefinitionVersion},</if>
+            <if test="processDefinitionType != null">#{processDefinitionType},</if>
+            <if test="processDefinitionCode != null">#{processDefinitionCode},</if>
+            <if test="processDefinitionName != null">#{processDefinitionName},</if>
+            <if test="processDefinitionDesc != null">#{processDefinitionDesc},</if>
+            <if test="processDefinitionContent != null and processDefinitionContent != ''">#{processDefinitionContent},</if>
+            <if test="deploymentUserId != null and deploymentUserId != ''">#{deploymentUserId},</if>
+            <if test="deploymentStatus != null and deploymentStatus != ''">#{deploymentStatus},</if>
+            <if test="logicStatus != null and logicStatus != ''">#{logicStatus},</if>
+            <if test="tenantId != null">#{tenantId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSeDeploymentInstance" parameterType="com.ruoyi.workflow.domain.SeDeploymentInstance">
+        update se_deployment_instance
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="gmtCreate != null">gmt_create = #{gmtCreate},</if>
+            <if test="gmtModified != null">gmt_modified = #{gmtModified},</if>
+            <if test="processDefinitionId != null and processDefinitionId != ''">process_definition_id = #{processDefinitionId},</if>
+            <if test="processDefinitionVersion != null">process_definition_version = #{processDefinitionVersion},</if>
+            <if test="processDefinitionType != null">process_definition_type = #{processDefinitionType},</if>
+            <if test="processDefinitionCode != null">process_definition_code = #{processDefinitionCode},</if>
+            <if test="processDefinitionName != null">process_definition_name = #{processDefinitionName},</if>
+            <if test="processDefinitionDesc != null">process_definition_desc = #{processDefinitionDesc},</if>
+            <if test="processDefinitionContent != null and processDefinitionContent != ''">process_definition_content = #{processDefinitionContent},</if>
+            <if test="deploymentUserId != null and deploymentUserId != ''">deployment_user_id = #{deploymentUserId},</if>
+            <if test="deploymentStatus != null and deploymentStatus != ''">deployment_status = #{deploymentStatus},</if>
+            <if test="logicStatus != null and logicStatus != ''">logic_status = #{logicStatus},</if>
+            <if test="tenantId != null">tenant_id = #{tenantId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSeDeploymentInstanceById" parameterType="String">
+        delete from se_deployment_instance where id = #{id}
+    </delete>
+
+    <delete id="deleteSeDeploymentInstanceByIds" parameterType="String">
+        delete from se_deployment_instance where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

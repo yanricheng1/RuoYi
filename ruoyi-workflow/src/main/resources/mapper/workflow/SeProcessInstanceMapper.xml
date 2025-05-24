@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.workflow.mapper.SeProcessInstanceMapper">
+    
+    <resultMap type="com.ruoyi.workflow.domain.SeProcessInstance" id="SeProcessInstanceResult">
+        <result property="id"    column="id"    />
+        <result property="gmtCreate"    column="gmt_create"    />
+        <result property="gmtModified"    column="gmt_modified"    />
+        <result property="processDefinitionIdAndVersion"    column="process_definition_id_and_version"    />
+        <result property="processDefinitionType"    column="process_definition_type"    />
+        <result property="status"    column="status"    />
+        <result property="parentProcessInstanceId"    column="parent_process_instance_id"    />
+        <result property="parentExecutionInstanceId"    column="parent_execution_instance_id"    />
+        <result property="startUserId"    column="start_user_id"    />
+        <result property="bizUniqueId"    column="biz_unique_id"    />
+        <result property="reason"    column="reason"    />
+        <result property="comment"    column="comment"    />
+        <result property="title"    column="title"    />
+        <result property="tag"    column="tag"    />
+        <result property="tenantId"    column="tenant_id"    />
+    </resultMap>
+
+    <sql id="selectSeProcessInstanceVo">
+        select id, gmt_create, gmt_modified, process_definition_id_and_version, process_definition_type, status, parent_process_instance_id, parent_execution_instance_id, start_user_id, biz_unique_id, reason, comment, title, tag, tenant_id from se_process_instance
+    </sql>
+
+    <select id="selectSeProcessInstanceList" parameterType="com.ruoyi.workflow.domain.SeProcessInstance" resultMap="SeProcessInstanceResult">
+        <include refid="selectSeProcessInstanceVo"/>
+        <where>  
+            <if test="gmtCreate != null "> and gmt_create = #{gmtCreate}</if>
+            <if test="gmtModified != null "> and gmt_modified = #{gmtModified}</if>
+            <if test="processDefinitionIdAndVersion != null  and processDefinitionIdAndVersion != ''"> and process_definition_id_and_version = #{processDefinitionIdAndVersion}</if>
+            <if test="processDefinitionType != null  and processDefinitionType != ''"> and process_definition_type = #{processDefinitionType}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="parentProcessInstanceId != null  and parentProcessInstanceId != ''"> and parent_process_instance_id = #{parentProcessInstanceId}</if>
+            <if test="parentExecutionInstanceId != null  and parentExecutionInstanceId != ''"> and parent_execution_instance_id = #{parentExecutionInstanceId}</if>
+            <if test="startUserId != null  and startUserId != ''"> and start_user_id = #{startUserId}</if>
+            <if test="bizUniqueId != null  and bizUniqueId != ''"> and biz_unique_id = #{bizUniqueId}</if>
+            <if test="reason != null  and reason != ''"> and reason = #{reason}</if>
+            <if test="comment != null  and comment != ''"> and comment = #{comment}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="tag != null  and tag != ''"> and tag = #{tag}</if>
+        </where>
+    </select>
+    
+    <select id="selectSeProcessInstanceById" parameterType="String" resultMap="SeProcessInstanceResult">
+        <include refid="selectSeProcessInstanceVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSeProcessInstance" parameterType="com.ruoyi.workflow.domain.SeProcessInstance" useGeneratedKeys="true" keyProperty="id">
+        insert into se_process_instance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="gmtCreate != null">gmt_create,</if>
+            <if test="gmtModified != null">gmt_modified,</if>
+            <if test="processDefinitionIdAndVersion != null and processDefinitionIdAndVersion != ''">process_definition_id_and_version,</if>
+            <if test="processDefinitionType != null">process_definition_type,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="parentProcessInstanceId != null">parent_process_instance_id,</if>
+            <if test="parentExecutionInstanceId != null">parent_execution_instance_id,</if>
+            <if test="startUserId != null">start_user_id,</if>
+            <if test="bizUniqueId != null">biz_unique_id,</if>
+            <if test="reason != null">reason,</if>
+            <if test="comment != null">comment,</if>
+            <if test="title != null">title,</if>
+            <if test="tag != null">tag,</if>
+            <if test="tenantId != null">tenant_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="gmtCreate != null">#{gmtCreate},</if>
+            <if test="gmtModified != null">#{gmtModified},</if>
+            <if test="processDefinitionIdAndVersion != null and processDefinitionIdAndVersion != ''">#{processDefinitionIdAndVersion},</if>
+            <if test="processDefinitionType != null">#{processDefinitionType},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="parentProcessInstanceId != null">#{parentProcessInstanceId},</if>
+            <if test="parentExecutionInstanceId != null">#{parentExecutionInstanceId},</if>
+            <if test="startUserId != null">#{startUserId},</if>
+            <if test="bizUniqueId != null">#{bizUniqueId},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="comment != null">#{comment},</if>
+            <if test="title != null">#{title},</if>
+            <if test="tag != null">#{tag},</if>
+            <if test="tenantId != null">#{tenantId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSeProcessInstance" parameterType="com.ruoyi.workflow.domain.SeProcessInstance">
+        update se_process_instance
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="gmtModified != null">gmt_modified = #{gmtModified},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            <if test="comment != null">comment = #{comment},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="tag != null">tag = #{tag},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSeProcessInstanceById" parameterType="String">
+        delete from se_process_instance where id = #{id}
+    </delete>
+
+    <delete id="deleteSeProcessInstanceByIds" parameterType="String">
+        delete from se_process_instance where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
