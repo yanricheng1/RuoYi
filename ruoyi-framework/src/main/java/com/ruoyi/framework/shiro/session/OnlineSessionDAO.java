@@ -2,22 +2,22 @@ package com.ruoyi.framework.shiro.session;
 
 import java.io.Serializable;
 import java.util.Date;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.session.UnknownSessionException;
-import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
+
+import com.ruoyi.auth.web.session.Session;
+import com.ruoyi.auth.web.session.exception.UnknownSessionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import com.ruoyi.common.enums.OnlineStatus;
 import com.ruoyi.framework.manager.AsyncManager;
 import com.ruoyi.framework.manager.factory.AsyncFactory;
-import com.ruoyi.framework.shiro.service.SysShiroService;
+import com.ruoyi.framework.manager.service.SysShiroService;
 
 /**
  * 针对自定义的ShiroSession的db操作
  * 
  * @author ruoyi
  */
-public class OnlineSessionDAO extends EnterpriseCacheSessionDAO
+public class OnlineSessionDAO  //extends EnterpriseCacheSessionDAO
 {
     /**
      * 同步session到数据库的周期 单位为毫秒（默认1分钟）
@@ -49,16 +49,14 @@ public class OnlineSessionDAO extends EnterpriseCacheSessionDAO
      * @param sessionId 会话ID
      * @return ShiroSession
      */
-    @Override
     protected Session doReadSession(Serializable sessionId)
     {
         return sysShiroService.getSession(sessionId);
     }
 
-    @Override
     public void update(Session session) throws UnknownSessionException
     {
-        super.update(session);
+//        super.update(session);
     }
 
     /**
@@ -103,7 +101,6 @@ public class OnlineSessionDAO extends EnterpriseCacheSessionDAO
     /**
      * 当会话过期/停止（如用户退出时）属性等会调用
      */
-    @Override
     protected void doDelete(Session session)
     {
         OnlineSession onlineSession = (OnlineSession) session;

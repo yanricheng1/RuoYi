@@ -1,8 +1,8 @@
 package com.ruoyi.web.controller.monitor;
 
 import java.util.List;
-import org.apache.shiro.authz.annotation.Logical;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.ruoyi.common.annotation.RequiresPermissions;
+import com.ruoyi.common.enums.Logical;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +16,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.enums.OnlineStatus;
-import com.ruoyi.common.utils.ShiroUtils;
-import com.ruoyi.framework.shiro.session.OnlineSession;
-import com.ruoyi.framework.shiro.session.OnlineSessionDAO;
+import com.ruoyi.common.utils.UserUtils;
 import com.ruoyi.system.domain.SysUserOnline;
 import com.ruoyi.system.service.ISysUserOnlineService;
 
@@ -36,8 +34,8 @@ public class SysUserOnlineController extends BaseController
     @Autowired
     private ISysUserOnlineService userOnlineService;
 
-    @Autowired
-    private OnlineSessionDAO onlineSessionDAO;
+//    @Autowired
+//    private OnlineSessionDAO onlineSessionDAO;
 
     @RequiresPermissions("monitor:online:view")
     @GetMapping()
@@ -69,16 +67,16 @@ public class SysUserOnlineController extends BaseController
             {
                 return error("用户已下线");
             }
-            OnlineSession onlineSession = (OnlineSession) onlineSessionDAO.readSession(online.getSessionId());
-            if (onlineSession == null)
-            {
-                return error("用户已下线");
-            }
-            if (sessionId.equals(ShiroUtils.getSessionId()))
+//            OnlineSession onlineSession = (OnlineSession) onlineSessionDAO.readSession(online.getSessionId());
+//            if (onlineSession == null)
+//            {
+//                return error("用户已下线");
+//            }
+            if (sessionId.equals(UserUtils.getSessionId()))
             {
                 return error("当前登录用户无法强退");
             }
-            onlineSessionDAO.delete(onlineSession);
+//            onlineSessionDAO.delete(onlineSession);
             online.setStatus(OnlineStatus.off_line);
             userOnlineService.saveOnline(online);
             userOnlineService.removeUserCache(online.getLoginName(), sessionId);

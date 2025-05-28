@@ -104,6 +104,7 @@ public interface SysMenuMapper
      * @return 结果
      */
     public int selectCountMenuByParentId(Long parentId);
+    public List<SysMenu> selectCountMenusByParentId(Long parentId);
 
     /**
      * 新增菜单信息

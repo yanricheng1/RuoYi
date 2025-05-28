@@ -288,6 +288,11 @@ public class SysMenuServiceImpl implements ISysMenuService
         return menuMapper.selectCountMenuByParentId(parentId);
     }
 
+    @Override
+    public List<SysMenu> selectMenusByParentId(Long parentId){
+        return menuMapper.selectCountMenusByParentId(parentId);
+    }
+
     /**
      * 查询菜单使用数量
      * 

@@ -7,7 +7,7 @@ import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.utils.AddressUtils;
 import com.ruoyi.common.utils.LogUtils;
 import com.ruoyi.common.utils.ServletUtils;
-import com.ruoyi.common.utils.ShiroUtils;
+import com.ruoyi.common.utils.UserUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.spring.SpringUtils;
 import com.ruoyi.framework.shiro.session.OnlineSession;
@@ -80,6 +80,9 @@ public class AsyncFactory
         };
     }
 
+
+
+
     /**
      * 记录登录信息
      * 
@@ -89,10 +92,14 @@ public class AsyncFactory
      * @param args 列表
      * @return 任务task
      */
-    public static TimerTask recordLogininfor(final String username, final String status, final String message, final Object... args)
+    public static TimerTask recordLogininfor(
+            final String username,
+            final String status,
+            final String message,
+            final Object... args)
     {
         final UserAgent userAgent = UserAgent.parseUserAgentString(ServletUtils.getRequest().getHeader("User-Agent"));
-        final String ip = ShiroUtils.getIp();
+        final String ip = UserUtils.getIp();
         return new TimerTask()
         {
             @Override

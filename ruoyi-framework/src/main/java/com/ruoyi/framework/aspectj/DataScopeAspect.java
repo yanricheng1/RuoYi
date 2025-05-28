@@ -2,6 +2,9 @@ package com.ruoyi.framework.aspectj;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.ruoyi.common.utils.UserUtils;
+import com.ruoyi.common.utils.context.AppThreadContext;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -13,7 +16,6 @@ import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.core.domain.entity.SysRole;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.text.Convert;
-import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.common.utils.StringUtils;
 
 /**
@@ -65,7 +67,7 @@ public class DataScopeAspect
     protected void handleDataScope(final JoinPoint joinPoint, DataScope controllerDataScope)
     {
         // 获取当前的用户
-        SysUser currentUser = ShiroUtils.getSysUser();
+        SysUser currentUser = UserUtils.getSysUser();
         if (currentUser != null)
         {
             // 如果是超级管理员，则不过滤数据

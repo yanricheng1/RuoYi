@@ -1,8 +1,10 @@
 package com.ruoyi.web.controller.monitor;
 
 import java.util.List;
-import com.ruoyi.framework.shiro.service.SysPasswordService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.ruoyi.common.annotation.RequiresPermissions;
+import com.ruoyi.auth.web.sso.service.SysPasswordService;
+import com.ruoyi.system.domain.SysLogininfor;
+import com.ruoyi.system.service.ISysLogininforService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +17,6 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.system.domain.SysLogininfor;
-import com.ruoyi.system.service.ISysLogininforService;
 
 /**
  * 系统访问记录

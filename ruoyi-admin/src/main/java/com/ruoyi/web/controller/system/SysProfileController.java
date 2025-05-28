@@ -1,5 +1,7 @@
 package com.ruoyi.web.controller.system;
 
+import com.ruoyi.common.utils.UserUtils;
+import com.ruoyi.common.utils.context.AuthHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,12 +21,13 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.common.utils.file.MimeTypeUtils;
-import com.ruoyi.framework.shiro.service.SysPasswordService;
+import com.ruoyi.auth.web.sso.service.SysPasswordService;
 import com.ruoyi.system.service.ISysUserService;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 个人信息 业务处理
@@ -50,7 +54,7 @@ public class SysProfileController extends BaseController
     @GetMapping()
     public String profile(ModelMap mmap)
     {
-        SysUser user = getSysUser();
+        SysUser user = UserUtils.getSysUser();
         mmap.put("user", user);
         mmap.put("roleGroup", userService.selectUserRoleGroup(user.getUserId()));
         mmap.put("postGroup", userService.selectUserPostGroup(user.getUserId()));
@@ -76,7 +80,7 @@ public class SysProfileController extends BaseController
     @Log(title = "重置密码", businessType = BusinessType.UPDATE)
     @PostMapping("/resetPwd")
     @ResponseBody
-    public AjaxResult resetPwd(String oldPassword, String newPassword)
+    public AjaxResult resetPwd(String oldPassword, String newPassword, HttpServletRequest request)
     {
         SysUser user = getSysUser();
         if (!passwordService.matches(user, oldPassword))
@@ -87,12 +91,12 @@ public class SysProfileController extends BaseController
         {
             return error("新密码不能与旧密码相同");
         }
-        user.setSalt(ShiroUtils.randomSalt());
+        user.setSalt(AuthHelper.randomSalt());
         user.setPassword(passwordService.encryptPassword(user.getLoginName(), newPassword, user.getSalt()));
         user.setPwdUpdateDate(DateUtils.getNowDate());
         if (userService.resetUserPwd(user) > 0)
         {
-            setSysUser(userService.selectUserById(user.getUserId()));
+            setSysUser(userService.selectUserById(user.getUserId()),request);
             return success();
         }
         return error("修改密码异常，请联系管理员");
@@ -126,7 +130,7 @@ public class SysProfileController extends BaseController
     @Log(title = "个人信息", businessType = BusinessType.UPDATE)
     @PostMapping("/update")
     @ResponseBody
-    public AjaxResult update(SysUser user)
+    public AjaxResult update(SysUser user,HttpServletRequest request)
     {
         SysUser currentUser = getSysUser();
         currentUser.setUserName(user.getUserName());
@@ -143,7 +147,7 @@ public class SysProfileController extends BaseController
         }
         if (userService.updateUserInfo(currentUser) > 0)
         {
-            setSysUser(userService.selectUserById(currentUser.getUserId()));
+            setSysUser(userService.selectUserById(currentUser.getUserId()),request);
             return success();
         }
         return error();
@@ -155,7 +159,7 @@ public class SysProfileController extends BaseController
     @Log(title = "个人信息", businessType = BusinessType.UPDATE)
     @PostMapping("/updateAvatar")
     @ResponseBody
-    public AjaxResult updateAvatar(@RequestParam("avatarfile") MultipartFile file)
+    public AjaxResult updateAvatar(@RequestParam("avatarfile") MultipartFile file,HttpServletRequest request)
     {
         SysUser currentUser = getSysUser();
         try
@@ -166,7 +170,7 @@ public class SysProfileController extends BaseController
                 currentUser.setAvatar(avatar);
                 if (userService.updateUserInfo(currentUser) > 0)
                 {
-                    setSysUser(userService.selectUserById(currentUser.getUserId()));
+                    setSysUser(userService.selectUserById(currentUser.getUserId()),request);
                     return success();
                 }
             }

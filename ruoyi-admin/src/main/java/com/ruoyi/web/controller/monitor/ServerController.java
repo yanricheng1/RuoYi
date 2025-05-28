@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.monitor;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.ruoyi.common.annotation.RequiresPermissions;
+import com.ruoyi.common.annotation.RequiresRoles;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;

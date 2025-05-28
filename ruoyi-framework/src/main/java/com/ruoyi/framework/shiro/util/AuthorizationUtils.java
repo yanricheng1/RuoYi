@@ -1,7 +1,5 @@
 package com.ruoyi.framework.shiro.util;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.mgt.RealmSecurityManager;
 import com.ruoyi.framework.shiro.realm.UserRealm;
 
 /**
@@ -16,15 +14,7 @@ public class AuthorizationUtils
      */
     public static void clearAllCachedAuthorizationInfo()
     {
-        getUserRealm().clearAllCachedAuthorizationInfo();
+//        getUserRealm().clearAllCachedAuthorizationInfo();
     }
 
-    /**
-     * 获取自定义Realm
-     */
-    public static UserRealm getUserRealm()
-    {
-        RealmSecurityManager rsm = (RealmSecurityManager) SecurityUtils.getSecurityManager();
-        return (UserRealm) rsm.getRealms().iterator().next();
-    }
 }

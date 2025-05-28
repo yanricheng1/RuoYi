@@ -2,8 +2,10 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.ruoyi.common.utils.context.AuthHelper;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.ruoyi.common.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -11,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,15 +28,17 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.common.utils.ShiroUtils;
+import com.ruoyi.common.utils.UserUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.framework.shiro.service.SysPasswordService;
+import com.ruoyi.auth.web.sso.service.SysPasswordService;
 import com.ruoyi.framework.shiro.util.AuthorizationUtils;
 import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysPostService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 用户信息
@@ -117,7 +122,10 @@ public class SysUserController extends BaseController
     @GetMapping("/add")
     public String add(ModelMap mmap)
     {
-        mmap.put("roles", roleService.selectRoleAll().stream().filter(r -> !r.isAdmin()).collect(Collectors.toList()));
+        mmap.put("roles", roleService.selectRoleAll().stream().filter(
+                r -> !r.isAdmin()
+        ).collect(Collectors.toList()));
+
         mmap.put("posts", postService.selectPostAll());
         return prefix + "/add";
     }
@@ -145,7 +153,7 @@ public class SysUserController extends BaseController
         {
             return error("新增用户'" + user.getLoginName() + "'失败，邮箱账号已存在");
         }
-        user.setSalt(ShiroUtils.randomSalt());
+        user.setSalt(AuthHelper.randomSalt());
         user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
         user.setPwdUpdateDate(DateUtils.getNowDate());
         user.setCreateBy(getLoginName());
@@ -224,17 +232,17 @@ public class SysUserController extends BaseController
     @Log(title = "重置密码", businessType = BusinessType.UPDATE)
     @PostMapping("/resetPwd")
     @ResponseBody
-    public AjaxResult resetPwdSave(SysUser user)
+    public AjaxResult resetPwdSave(SysUser user, HttpServletRequest request)
     {
         userService.checkUserAllowed(user);
         userService.checkUserDataScope(user.getUserId());
-        user.setSalt(ShiroUtils.randomSalt());
+        user.setSalt(AuthHelper.randomSalt());
         user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
         if (userService.resetUserPwd(user) > 0)
         {
-            if (ShiroUtils.getUserId().longValue() == user.getUserId().longValue())
+            if (UserUtils.getUserId().longValue() == user.getUserId().longValue())
             {
-                setSysUser(userService.selectUserById(user.getUserId()));
+                setSysUser(userService.selectUserById(user.getUserId()),request);
             }
             return success();
         }

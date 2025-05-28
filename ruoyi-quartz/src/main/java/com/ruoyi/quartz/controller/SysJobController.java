@@ -1,7 +1,8 @@
 package com.ruoyi.quartz.controller;
 
 import java.util.List;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.ruoyi.common.annotation.RequiresPermissions;
+import com.ruoyi.common.annotation.RequiresRoles;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

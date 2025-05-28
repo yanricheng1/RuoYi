@@ -1,7 +1,8 @@
 package com.ruoyi.web.controller.system;
 
 import java.util.List;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.ruoyi.common.annotation.RequiresPermissions;
+import com.ruoyi.common.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -9,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
@@ -25,6 +27,8 @@ import com.ruoyi.system.domain.SysUserRole;
 import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 角色信息
@@ -161,14 +165,14 @@ public class SysRoleController extends BaseController
     @Log(title = "角色管理", businessType = BusinessType.UPDATE)
     @PostMapping("/authDataScope")
     @ResponseBody
-    public AjaxResult authDataScopeSave(SysRole role)
+    public AjaxResult authDataScopeSave(SysRole role, HttpServletRequest request)
     {
         roleService.checkRoleAllowed(role);
         roleService.checkRoleDataScope(role.getRoleId());
         role.setUpdateBy(getLoginName());
         if (roleService.authDataScope(role) > 0)
         {
-            setSysUser(userService.selectUserById(getUserId()));
+            setSysUser(userService.selectUserById(getUserId()),request);
             return success();
         }
         return error();

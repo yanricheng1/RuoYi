@@ -1,7 +1,10 @@
 package com.ruoyi.system.mapper;
 
 import java.util.List;
+
+import com.ruoyi.common.core.domain.entity.SysRole;
 import com.ruoyi.system.domain.SysRoleMenu;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 角色与菜单关联表 数据层
@@ -25,7 +28,9 @@ public interface SysRoleMenuMapper
      * @return 结果
      */
     public int deleteRoleMenu(Long[] ids);
-    
+
+    List<SysRoleMenu> selectRoleMenusByMenuIds(@Param("menuIds") List<Long> menuIds);
+
     /**
      * 查询菜单使用数量
      * 

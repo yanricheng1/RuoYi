@@ -1,8 +1,8 @@
 package com.ruoyi.framework.shiro.session;
 
+import com.ruoyi.auth.web.util.SimpleSession;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.apache.shiro.session.mgt.SimpleSession;
 import com.ruoyi.common.enums.OnlineStatus;
 
 /**
@@ -10,8 +10,10 @@ import com.ruoyi.common.enums.OnlineStatus;
  * 
  * @author ruoyi
  */
-public class OnlineSession extends SimpleSession
+public class OnlineSession  extends SimpleSession
 {
+
+    private String id;
     private static final long serialVersionUID = 1L;
 
     /** 用户ID */
@@ -47,7 +49,6 @@ public class OnlineSession extends SimpleSession
         return host;
     }
 
-    @Override
     public void setHost(String host)
     {
         this.host = host;
@@ -135,17 +136,28 @@ public class OnlineSession extends SimpleSession
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
 	}
-	
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public void setAttribute(Object key, Object value)
     {
-        super.setAttribute(key, value);
+//        super.setAttribute(key, value);
     }
 
     @Override
     public Object removeAttribute(Object key)
     {
-        return super.removeAttribute(key);
+//        return super.removeAttribute(key);
+        return null;
     }
 
     @Override

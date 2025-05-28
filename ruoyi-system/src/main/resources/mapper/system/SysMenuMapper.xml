@@ -129,6 +129,10 @@
 	    select count(1) from sys_menu where parent_id=#{menuId}  
 	</select>
 
+	<select id="selectCountMenusByParentId" resultMap="SysMenuResult">
+		select <include refid="selectMenuVo"/> from sys_menu where parent_id=#{menuId}
+	</select>
+
 	<select id="checkMenuNameUnique" parameterType="SysMenu" resultMap="SysMenuResult">
 		<include refid="selectMenuVo"/>
 		where menu_name=#{menuName} and parent_id = #{parentId} limit 1

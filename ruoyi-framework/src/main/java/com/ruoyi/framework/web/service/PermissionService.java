@@ -3,8 +3,6 @@ package com.ruoyi.framework.web.service;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -100,8 +98,9 @@ public class PermissionService
      */
     public boolean isUser()
     {
-        Subject subject = SecurityUtils.getSubject();
-        return subject != null && subject.getPrincipal() != null;
+//        Subject subject = SecurityUtils.getSubject();
+//        return subject != null && subject.getPrincipal() != null;
+        return true;
     }
 
     /**
@@ -112,7 +111,8 @@ public class PermissionService
      */
     public boolean isPermitted(String permission)
     {
-        return SecurityUtils.getSubject().isPermitted(permission);
+//        return SecurityUtils.getSubject().isPermitted(permission);
+        return true;
     }
 
     /**
@@ -146,25 +146,26 @@ public class PermissionService
      */
     public boolean hasAnyPermissions(String permissions, String delimeter)
     {
-        Subject subject = SecurityUtils.getSubject();
-
-        if (subject != null)
-        {
-            if (delimeter == null || delimeter.length() == 0)
-            {
-                delimeter = PERMISSION_DELIMETER;
-            }
-
-            for (String permission : permissions.split(delimeter))
-            {
-                if (permission != null && subject.isPermitted(permission.trim()) == true)
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+//        Subject subject = SecurityUtils.getSubject();
+//
+//        if (subject != null)
+//        {
+//            if (delimeter == null || delimeter.length() == 0)
+//            {
+//                delimeter = PERMISSION_DELIMETER;
+//            }
+//
+//            for (String permission : permissions.split(delimeter))
+//            {
+//                if (permission != null && subject.isPermitted(permission.trim()) == true)
+//                {
+//                    return true;
+//                }
+//            }
+//        }
+//
+//        return false;
+        return true;
     }
 
     /**
@@ -175,7 +176,8 @@ public class PermissionService
      */
     public boolean isRole(String role)
     {
-        return SecurityUtils.getSubject().hasRole(role);
+//        return SecurityUtils.getSubject().hasRole(role);
+        return true;
     }
 
     /**
@@ -209,24 +211,25 @@ public class PermissionService
      */
     public boolean isAnyRoles(String roles, String delimeter)
     {
-        Subject subject = SecurityUtils.getSubject();
-        if (subject != null)
-        {
-            if (delimeter == null || delimeter.length() == 0)
-            {
-                delimeter = ROLE_DELIMETER;
-            }
-
-            for (String role : roles.split(delimeter))
-            {
-                if (subject.hasRole(role.trim()) == true)
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+//        Subject subject = SecurityUtils.getSubject();
+//        if (subject != null)
+//        {
+//            if (delimeter == null || delimeter.length() == 0)
+//            {
+//                delimeter = ROLE_DELIMETER;
+//            }
+//
+//            for (String role : roles.split(delimeter))
+//            {
+//                if (subject.hasRole(role.trim()) == true)
+//                {
+//                    return true;
+//                }
+//            }
+//        }
+//
+//        return false;
+        return true;
     }
 
     /**
@@ -237,26 +240,26 @@ public class PermissionService
      */
     public Object getPrincipalProperty(String property)
     {
-        Subject subject = SecurityUtils.getSubject();
-        if (subject != null)
-        {
-            Object principal = subject.getPrincipal();
-            try
-            {
-                BeanInfo bi = Introspector.getBeanInfo(principal.getClass());
-                for (PropertyDescriptor pd : bi.getPropertyDescriptors())
-                {
-                    if (pd.getName().equals(property) == true)
-                    {
-                        return pd.getReadMethod().invoke(principal, (Object[]) null);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                log.error("Error reading property [{}] from principal of type [{}]", property, principal.getClass().getName());
-            }
-        }
+//        Subject subject = SecurityUtils.getSubject();
+//        if (subject != null)
+//        {
+//            Object principal = subject.getPrincipal();
+//            try
+//            {
+//                BeanInfo bi = Introspector.getBeanInfo(principal.getClass());
+//                for (PropertyDescriptor pd : bi.getPropertyDescriptors())
+//                {
+//                    if (pd.getName().equals(property) == true)
+//                    {
+//                        return pd.getReadMethod().invoke(principal, (Object[]) null);
+//                    }
+//                }
+//            }
+//            catch (Exception e)
+//            {
+//                log.error("Error reading property [{}] from principal of type [{}]", property, principal.getClass().getName());
+//            }
+//        }
         return null;
     }
 }

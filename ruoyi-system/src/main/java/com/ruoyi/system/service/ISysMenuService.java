@@ -105,6 +105,9 @@ public interface ISysMenuService
      */
     public int selectCountMenuByParentId(Long parentId);
 
+
+    List<SysMenu> selectMenusByParentId(Long parentId);
+
     /**
      * 查询菜单使用数量
      * 

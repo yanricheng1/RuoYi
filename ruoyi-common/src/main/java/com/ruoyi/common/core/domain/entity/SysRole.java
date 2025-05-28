@@ -83,7 +83,7 @@ public class SysRole extends BaseEntity
 
     public static boolean isAdmin(Long roleId)
     {
-        return roleId != null && 1L == roleId;
+        return roleId != null && 1L == roleId.longValue();
     }
 
     public String getDataScope()
