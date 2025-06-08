@@ -12,6 +12,7 @@ import com.ruoyi.common.utils.spring.SpringUtils;
 import com.ruoyi.system.domain.SysRoleDept;
 import com.ruoyi.system.domain.SysRoleMenu;
 import com.ruoyi.system.domain.SysUserRole;
+import com.ruoyi.system.enums.RoleType;
 import com.ruoyi.system.mapper.SysRoleDeptMapper;
 import com.ruoyi.system.mapper.SysRoleMapper;
 import com.ruoyi.system.mapper.SysRoleMenuMapper;
@@ -63,6 +64,13 @@ public class SysRoleServiceImpl implements ISysRoleService {
     public List<SysRole> selectRoleList(SysRole role) {
         return roleMapper.selectRoleList(role);
     }
+
+
+    @Override
+    public List<SysRole> selectPureRoleList(SysRole role) {
+        return roleMapper.selectPureRoleList(role);
+    }
+
 
     /**
      * 根据用户ID查询权限
@@ -156,6 +164,9 @@ public class SysRoleServiceImpl implements ISysRoleService {
             SysRole role = selectRoleById(roleId);
             if (countUserRoleByRoleId(roleId) > 0) {
                 throw new ServiceException(String.format("%1$s已分配,不能删除", role.getRoleName()));
+            }
+            if(StringUtils.equalsIgnoreCase(role.getType(), RoleType.sys.name())){
+                throw new ServiceException(String.format("%s为系统内置角色不允许删除", role.getRoleName()));
             }
         }
         // 删除角色与菜单关联

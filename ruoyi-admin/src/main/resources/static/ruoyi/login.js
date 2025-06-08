@@ -31,7 +31,11 @@ function login() {
         },
         success: function(r) {
             if (r.code == web_status.SUCCESS) {
-                location.href = ctx + 'index';
+                if(r.userBizType == 'new_regiter'){
+                    location.href = ctx + 'wizards';
+                }else{
+                    location.href = ctx + 'index';
+                }
             } else {
                 $('.imgcode').click();
                 $(".code").val("");

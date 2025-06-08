@@ -7,7 +7,7 @@ ruoyi:
   # 版权年份
   copyrightYear: 2025
   # 实例演示开关
-  demoEnabled: true
+  demoEnabled: false
   # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
   profile: D:/ruoyi/uploadPath
   # 获取ip地址开关
@@ -45,17 +45,25 @@ user:
 
 # Spring配置
 spring:
+  session:
+    store-type: redis
+#    redis:
+#      namespace: session
+#      flush-mode: immediate
+#      save-mode: on_set_attribute
+#      configure-action: notify_keyspace_events
   cache:
     type: redis
     redis:
       use-key-prefix: true
       # 缓存key的前缀
-      key-prefix: ruoyi
+      key-prefix: ruoyi:cache
       timeout: 1
       # 缓存更新时间，默认10秒
-      time-to-live: 60
+      time-to-live: 7200
       cache-null-values: false
   redis:
+      timeout: 3000
       host: localhost
       port: 6379
       password:

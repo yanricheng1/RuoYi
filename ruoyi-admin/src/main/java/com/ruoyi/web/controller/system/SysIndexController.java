@@ -1,8 +1,9 @@
 package com.ruoyi.web.controller.system;
 
+import com.alibaba.fastjson.JSON;
 import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.constant.ShiroConstants;
-import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.web.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysMenu;
 import com.ruoyi.common.core.domain.entity.SysUser;
@@ -46,6 +47,11 @@ public class SysIndexController extends BaseController {
     @Autowired
     private SysPasswordService passwordService;
 
+    @GetMapping("/wizards")
+    public String wizards(ModelMap mmap, HttpServletRequest request) {
+        return "wizards";
+    }
+
     // 系统首页
     @GetMapping("/index")
     public String index(ModelMap mmap, HttpServletRequest request) {
@@ -54,6 +60,7 @@ public class SysIndexController extends BaseController {
         // 根据用户id取出菜单
         SysUser user = account.toSysUser();
         List<SysMenu> menus = menuService.selectMenusByUser(user);
+        logger.info("进入主页：{}", JSON.toJSONString(menus));
         mmap.put("menus", menus);
         mmap.put("user", user);
         mmap.put("sideTheme", configService.selectConfigByKey("sys.index.sideTheme"));
@@ -64,11 +71,10 @@ public class SysIndexController extends BaseController {
         mmap.put("tagsView", tagsView);
         mmap.put("mainClass", contentMainClass(footer, tagsView));
         mmap.put("copyrightYear", RuoYiConfig.getCopyrightYear());
-        mmap.put("demoEnabled", RuoYiConfig.isDemoEnabled());
+        mmap.put("demoEnabled", RuoYiConfig.isDemoEnabled() || user.isAdmin());
         mmap.put("isDefaultModifyPwd", initPasswordIsModify(user.getPwdUpdateDate()));
         mmap.put("isPasswordExpired", passwordIsExpiration(user.getPwdUpdateDate()));
         mmap.put("isMobile", ServletUtils.checkAgentIsMobile(ServletUtils.getRequest().getHeader("User-Agent")));
-
         // 菜单导航显示风格
         String menuStyle = configService.selectConfigByKey("sys.index.menuStyle");
         // 移动端，默认使左侧导航菜单，否则取默认配置

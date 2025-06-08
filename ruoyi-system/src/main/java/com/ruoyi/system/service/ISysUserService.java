@@ -67,6 +67,8 @@ public interface ISysUserService
      */
     public SysUser selectUserById(Long userId);
 
+    SysUser selectUserByIdAndCid( Long userId,String companyId);
+
     /**
      * 通过用户ID查询用户和角色关联
      * 
@@ -139,6 +141,8 @@ public interface ISysUserService
      * @return 结果
      */
     public int resetUserPwd(SysUser user);
+
+    void insertUserRole(Long userId, Long[] roleIds);
 
     /**
      * 校验用户名称是否唯一

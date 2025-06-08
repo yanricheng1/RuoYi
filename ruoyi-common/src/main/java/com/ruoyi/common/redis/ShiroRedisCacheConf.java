@@ -14,7 +14,7 @@ public class ShiroRedisCacheConf {
     private Integer cacheLive;
 
 
-    @Value("${cache.cachePrefix:shiroApp}")
+    @Value("${cache.cachePrefix:shiro}")
     private String cachePrefix;
 
 

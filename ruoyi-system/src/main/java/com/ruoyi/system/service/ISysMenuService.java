@@ -32,6 +32,9 @@ public interface ISysMenuService
      */
     public List<SysMenu> selectMenuList(SysMenu menu, Long userId);
 
+
+    List<SysMenu> selectCompanyMenuList(SysMenu menu);
+
     /**
      * 查询菜单集合
      * 

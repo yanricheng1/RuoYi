@@ -1,11 +1,12 @@
 package com.ruoyi.web.controller.system;
 
+import com.ruoyi.system.enums.UserBizType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.web.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.utils.StringUtils;
@@ -40,6 +41,8 @@ public class SysRegisterController extends BaseController
         {
             return error("当前系统没有开启注册功能！");
         }
+
+        user.setBizType(UserBizType.new_regiter.name());
         String msg = registerService.register(user);
         return StringUtils.isEmpty(msg) ? success() : error(msg);
     }

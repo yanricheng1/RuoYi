@@ -4,6 +4,7 @@ package com.ruoyi.common.utils;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.utils.context.Account;
 import com.ruoyi.common.utils.context.AppThreadContext;
+import com.ruoyi.common.utils.spring.SpringUtils;
 
 /**
  * shiro 工具类
@@ -12,9 +13,6 @@ import com.ruoyi.common.utils.context.AppThreadContext;
  */
 public class UserUtils {
 
-    public static void unbindAccount(Account account) {
-        AppThreadContext.bind(account);
-    }
 
     public static Account unbindAccount() {
         return AppThreadContext.unbindAccount();

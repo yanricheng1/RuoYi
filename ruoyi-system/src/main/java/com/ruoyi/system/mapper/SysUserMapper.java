@@ -2,6 +2,7 @@ package com.ruoyi.system.mapper;
 
 import java.util.List;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 用户表 数据层
@@ -65,6 +66,10 @@ public interface SysUserMapper
      * @return 用户对象信息
      */
     public SysUser selectUserById(Long userId);
+    public SysUser selectUserByIdAndCid(
+            @Param("userId") Long userId,
+            @Param("companyId") String companyId
+            );
 
     /**
      * 通过用户ID删除用户

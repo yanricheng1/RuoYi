@@ -53,6 +53,24 @@ public class SysDept extends BaseEntity
 
     /** 排除编号 */
     private Long excludeId;
+    private Long companyId;
+    private String tenantId;
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
 
     public Long getDeptId()
     {

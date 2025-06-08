@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysTenantMapper">
+    
+    <resultMap type="com.ruoyi.system.domain.SysTenant" id="SysTenantResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="code"    column="code"    />
+        <result property="taxNo"    column="tax_no"    />
+        <result property="fullName"    column="full_name"    />
+        <result property="isDelete"    column="is_delete"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="creatorId"    column="creator_id"    />
+        <result property="creatorName"    column="creator_name"    />
+        <result property="modifierId"    column="modifier_id"    />
+        <result property="modifierName"    column="modifier_name"    />
+        <result property="modifyDate"    column="modify_date"    />
+        <result property="version"    column="version"    />
+    </resultMap>
+
+    <sql id="selectSysTenantVo">
+        select id, name, code, tax_no, full_name, is_delete, create_date, creator_id, creator_name, modifier_id, modifier_name, modify_date, version from sys_tenant
+    </sql>
+
+    <select id="selectSysTenantList" parameterType="com.ruoyi.system.domain.SysTenant" resultMap="SysTenantResult">
+        <include refid="selectSysTenantVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="code != null  and code != ''"> and code = #{code}</if>
+            <if test="taxNo != null  and taxNo != ''"> and tax_no = #{taxNo}</if>
+            <if test="fullName != null  and fullName != ''"> and full_name like concat('%', #{fullName}, '%')</if>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="createDate != null "> and create_date = #{createDate}</if>
+            <if test="creatorId != null  and creatorId != ''"> and creator_id = #{creatorId}</if>
+            <if test="creatorName != null  and creatorName != ''"> and creator_name like concat('%', #{creatorName}, '%')</if>
+            <if test="modifierId != null  and modifierId != ''"> and modifier_id = #{modifierId}</if>
+            <if test="modifierName != null  and modifierName != ''"> and modifier_name like concat('%', #{modifierName}, '%')</if>
+            <if test="modifyDate != null "> and modify_date = #{modifyDate}</if>
+            <if test="version != null "> and version = #{version}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysTenantById" parameterType="Long" resultMap="SysTenantResult">
+        <include refid="selectSysTenantVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSysTenant" parameterType="com.ruoyi.system.domain.SysTenant" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_tenant
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="code != null and code != ''">code,</if>
+            <if test="taxNo != null and taxNo != ''">tax_no,</if>
+            <if test="fullName != null">full_name,</if>
+            <if test="isDelete != null">is_delete,</if>
+            <if test="creatorId != null">creator_id,</if>
+            <if test="creatorName != null">creator_name,</if>
+            <if test="modifierId != null">modifier_id,</if>
+            <if test="modifierName != null">modifier_name,</if>
+            <if test="modifyDate != null">modify_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="code != null and code != ''">#{code},</if>
+            <if test="taxNo != null and taxNo != ''">#{taxNo},</if>
+            <if test="fullName != null">#{fullName},</if>
+            <if test="isDelete != null">#{isDelete},</if>
+            <if test="creatorId != null">#{creatorId},</if>
+            <if test="creatorName != null">#{creatorName},</if>
+            <if test="modifierId != null">#{modifierId},</if>
+            <if test="modifierName != null">#{modifierName},</if>
+            <if test="modifyDate != null">#{modifyDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysTenant" parameterType="com.ruoyi.system.domain.SysTenant">
+        update sys_tenant
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="code != null and code != ''">code = #{code},</if>
+            <if test="taxNo != null and taxNo != ''">tax_no = #{taxNo},</if>
+            <if test="fullName != null">full_name = #{fullName},</if>
+            <if test="creatorName != null">creator_name = #{creatorName},</if>
+            <if test="modifierId != null">modifier_id = #{modifierId},</if>
+            <if test="modifierName != null">modifier_name = #{modifierName},</if>
+            <if test="modifyDate != null">modify_date = #{modifyDate},</if>
+            <if test="version != null">version = #{version},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysTenantById" parameterType="Long">
+        delete from sys_tenant where id = #{id}
+    </delete>
+
+    <delete id="deleteSysTenantByIds" parameterType="String">
+        delete from sys_tenant where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -24,6 +24,8 @@ public interface ISysRoleService {
      */
     List<SysRole> selectRoleList(SysRole role);
 
+    List<SysRole> selectPureRoleList(SysRole role);
+
     /**
      * 根据用户ID查询角色列表
      *

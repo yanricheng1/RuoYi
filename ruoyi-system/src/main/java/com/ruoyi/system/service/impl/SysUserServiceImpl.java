@@ -24,6 +24,7 @@ import com.ruoyi.system.mapper.SysUserRoleMapper;
 import com.ruoyi.system.service.ISysConfigService;
 import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysUserService;
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ import java.util.stream.Collectors;
  *
  * @author ruoyi
  */
-@Service
+@Service("sysUserServiceImpl")
 public class SysUserServiceImpl implements ISysUserService {
     private static final Logger log = LoggerFactory.getLogger(SysUserServiceImpl.class);
     @Autowired
@@ -140,6 +141,11 @@ public class SysUserServiceImpl implements ISysUserService {
     @Override
     public SysUser selectUserById(Long userId) {
         return userMapper.selectUserById(userId);
+    }
+
+    @Override
+    public SysUser selectUserByIdAndCid( Long userId,String companyId){
+        return userMapper.selectUserByIdAndCid(userId,companyId);
     }
 
     /**
@@ -282,6 +288,8 @@ public class SysUserServiceImpl implements ISysUserService {
      * @param userId  用户ID
      * @param roleIds 角色组
      */
+
+    @Override
     public void insertUserRole(Long userId, Long[] roleIds) {
         if (StringUtils.isNotNull(roleIds)) {
             // 新增用户与角色管理

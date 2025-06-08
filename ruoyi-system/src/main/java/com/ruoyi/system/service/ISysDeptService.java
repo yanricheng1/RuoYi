@@ -92,6 +92,13 @@ public interface ISysDeptService
      */
     public SysDept selectDeptById(Long deptId);
 
+
+    SysDept selectDeptByParentId(
+            String companyId,
+            Long parentId);
+
+
+
     /**
      * 根据ID查询所有子部门（正常状态）
      * 

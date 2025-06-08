@@ -74,6 +74,10 @@ public interface SysDeptMapper
      * @return 部门信息
      */
     public SysDept selectDeptById(Long deptId);
+    public SysDept selectDeptByParentId(
+            @Param("companyId") String companyId,
+            @Param("parentId") Long parentId
+    );
 
     /**
      * 校验部门名称是否唯一

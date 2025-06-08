@@ -1,12 +1,11 @@
 package com.ruoyi.web.controller.monitor;
 
 import com.ruoyi.common.annotation.RequiresPermissions;
-import com.ruoyi.common.annotation.RequiresRoles;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.web.controller.BaseController;
 import com.ruoyi.framework.web.domain.Server;
 
 /**

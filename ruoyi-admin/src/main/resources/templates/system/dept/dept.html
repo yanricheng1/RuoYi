@@ -11,6 +11,15 @@
 					<div class="select-list">
 						<ul>
 							<li>
+								企业：
+								<select name="companyId" th:with="companyList=${companies}" required>
+									<option value="-1">--请选择企业--</option>
+									<option  th:each="company : ${companyList}"
+											 th:text="${company.name}"
+											 th:value="${company.id}"/>
+							     </select>
+							</li>
+							<li>
 								部门名称：<input type="text" name="deptName"/>
 							</li>
 							<li>
@@ -29,7 +38,7 @@
 			</div>
                 
             <div class="btn-group-sm" id="toolbar" role="group">
-		        <a class="btn btn-success" onclick="$.operate.add(100)" shiro:hasPermission="system:dept:add">
+		        <a class="btn btn-success" onclick="$.operate.add(0)" shiro:hasPermission="system:dept:add">
                     <i class="fa fa-plus"></i> 新增
                 </a>
                 <a class="btn btn-primary" onclick="$.operate.edit()" shiro:hasPermission="system:dept:edit">

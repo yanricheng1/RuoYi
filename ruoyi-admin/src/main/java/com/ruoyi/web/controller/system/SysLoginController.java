@@ -2,8 +2,9 @@ package com.ruoyi.web.controller.system;
 
 import com.ruoyi.auth.web.authz.UsernamePasswordToken;
 import com.ruoyi.auth.web.sso.manager.LoginManager;
-import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.web.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.common.utils.StringUtils;
@@ -68,6 +69,7 @@ public class SysLoginController extends BaseController {
             Account account = (Account) obj;
             loginManager.logout(account.toSysUser());
             request.getSession().removeAttribute(ContextConstants.AUTH_ACCOUNT_KEY);
+            request.getSession().invalidate();
             AppThreadContext.unbindAccount();
         }
 
@@ -125,12 +127,14 @@ public class SysLoginController extends BaseController {
         }
 
         UsernamePasswordToken token = new UsernamePasswordToken(username, password, rememberMe);
-        loginManager.login(token);
+        SysUser user = loginManager.login(token);
         Account account = UserUtils.getAccount();
         if (account != null) {
             request.getSession().setAttribute(ContextConstants.AUTH_ACCOUNT_KEY, account);
         }
-        return success();
+        AjaxResult success = success();
+        success.put("userBizType", user.getBizType());
+        return success;
     }
 
     @GetMapping("/unauth")

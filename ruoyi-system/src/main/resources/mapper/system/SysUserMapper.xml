@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.SysUserMapper">
 
-	<resultMap type="SysUser" id="SysUserResult">
+	<resultMap type="com.ruoyi.common.core.domain.entity.SysUser" id="SysUserResult">
 		<id     property="userId"        column="user_id"         />
 		<result property="deptId"        column="dept_id"         />
 		<result property="loginName"     column="login_name"      />
@@ -26,6 +26,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="updateBy"      column="update_by"       />
 		<result property="updateTime"    column="update_time"     />
 		<result property="remark"        column="remark"          />
+		<result property="tenantId"        column="tenant_id"          />
+		<result property="companyId"        column="company_id"          />
+		<result property="bizType"        column="biz_type"          />
+		<result property="bizId"        column="biz_id"          />
 		<association property="dept"     javaType="SysDept"         resultMap="deptResult" />
 		<collection  property="roles"    javaType="java.util.List"  resultMap="RoleResult" />
 	</resultMap>
@@ -50,7 +54,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	
 	<sql id="selectUserVo">
-        select  u.user_id, u.dept_id, u.login_name, u.user_name, u.user_type, u.email, u.avatar, u.phonenumber, u.sex, u.password, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.pwd_update_date, u.create_by, u.create_time, u.update_by, u.update_time, u.remark,
+        select  u.user_id, u.dept_id, u.login_name, u.user_name, u.user_type, u.email, u.avatar, u.phonenumber,
+                u.sex, u.password, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.pwd_update_date,
+                u.create_by, u.create_time, u.update_by, u.update_time, u.remark,
+                u.tenant_id,u.company_id,u.biz_type,u.biz_id,
        		    d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.order_num, d.leader, d.status as dept_status,
        		    r.role_id, r.role_name, r.role_key, r.role_sort, r.data_scope, r.status as role_status
 		from sys_user u
@@ -154,6 +161,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<include refid="selectUserVo"/>
 		where u.user_id = #{userId}
 	</select>
+
+	<select id="selectUserByIdAndCid" resultMap="SysUserResult">
+		<include refid="selectUserVo"/>
+		where u.user_id = #{userId}
+		and  u.company_id = #{companyId}
+	</select>
 	
 	<delete id="deleteUserById" parameterType="Long">
  		update sys_user set del_flag = '2' where user_id = #{userId}
@@ -184,6 +197,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="pwdUpdateDate != null">pwd_update_date = #{pwdUpdateDate},</if>
  			<if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
  			<if test="remark != null">remark = #{remark},</if>
+ 			<if test="tenantId != null">tenant_id = #{tenantId},</if>
+ 			<if test="companyId != null">company_id = #{companyId},</if>
+ 			<if test="bizType != null">biz_type = #{bizType},</if>
+ 			<if test="bizId != null">biz_id = #{bizId},</if>
  			update_time = sysdate()
  		</set>
  		where user_id = #{userId}
@@ -206,6 +223,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="pwdUpdateDate != null">pwd_update_date,</if>
  			<if test="createBy != null and createBy != ''">create_by,</if>
  			<if test="remark != null and remark != ''">remark,</if>
+ 			<if test="tenantId != null and tenantId != ''">tenant_id,</if>
+ 			<if test="companyId != null and companyId != ''">company_id,</if>
+ 			<if test="bizType != null and bizType != ''">biz_type,</if>
+ 			<if test="bizId != null and bizId != ''">biz_id,</if>
  			create_time
  		)values(
  			<if test="userId != null and userId != ''">#{userId},</if>
@@ -223,6 +244,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="pwdUpdateDate != null">#{pwdUpdateDate},</if>
  			<if test="createBy != null and createBy != ''">#{createBy},</if>
  			<if test="remark != null and remark != ''">#{remark},</if>
+ 			<if test="tenantId != null and tenantId != ''">#{tenantId},</if>
+ 			<if test="companyId != null and companyId != ''">#{CompanyId},</if>
+ 			<if test="bizType != null and bizType != ''">#{bizType},</if>
+ 			<if test="bizId != null and bizId != ''">#{bizId},</if>
  			sysdate()
  		)
 	</insert>

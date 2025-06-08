@@ -32,7 +32,7 @@ public class AppSsoFilter extends RequestContextFilter {
 
         String uri = request.getRequestURI();
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("=======>>>> receive app request,anonymous:{} uri：{}", anonymous, uri);
+//            LOGGER.debug("=======>>>> receive app request,anonymous:{} uri：{}", anonymous, uri);
         }
 
         if (anonymous) {

@@ -2,7 +2,7 @@ package com.ruoyi.web.controller.system;
 
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.annotation.RequiresPermissions;
-import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.web.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.Ztree;
 import com.ruoyi.common.core.domain.entity.SysMenu;

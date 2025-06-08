@@ -83,6 +83,16 @@ public class SysMenuServiceImpl implements ISysMenuService
         return menuList;
     }
 
+
+    @Override
+    public List<SysMenu> selectCompanyMenuList(SysMenu menu)
+    {
+        List<SysMenu>   menuList = menuMapper.selectMenuList(menu);
+        return menuList;
+    }
+
+
+
     /**
      * 查询菜单集合
      * 

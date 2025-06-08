@@ -1,7 +1,6 @@
 package com.ruoyi.common.utils.context;
 
 
-import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.entity.SysDept;
 import com.ruoyi.common.core.domain.entity.SysRole;
 import com.ruoyi.common.core.domain.entity.SysUser;
@@ -12,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -21,8 +21,8 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Account {
-
+public class Account implements Serializable {
+    private static final long serialVersionUID = 2982792257697596989L;
     private Long userId;
 
     /**
@@ -111,14 +111,23 @@ public class Account {
     private Date createTime;
 
 
-    /** 密码 */
+    /**
+     * 密码
+     */
     private String password;
 
-    /** 盐加密 */
+    /**
+     * 盐加密
+     */
     private String salt;
 
+    private String tenantId;
+    private String companyId;
+    private String bizType;
+    private String bizId;
+
     public static Account from(SysUser user) {
-        if(user==null){
+        if (user == null) {
             return null;
         }
         Account account = Account.builder()
@@ -145,6 +154,10 @@ public class Account {
                 .createTime(user.getCreateTime())
                 .password(user.getPassword())
                 .salt(user.getSalt())
+                .companyId(user.getCompanyId())
+                .tenantId(user.getTenantId())
+                .bizId(user.getBizId())
+                .bizType(user.getBizType())
                 .build();
 
         return account;
@@ -175,6 +188,11 @@ public class Account {
         user.setCreateTime(this.getCreateTime());
         user.setSalt(this.getSalt());
         user.setPassword(this.getPassword());
+        user.setCompanyId(this.getCompanyId());
+        user.setTenantId(this.getTenantId());
+        user.setBizId(this.getBizId());
+        user.setBizType(this.getBizType());
         return user;
+
     }
 }

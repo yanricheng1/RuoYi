@@ -45,7 +45,7 @@ public class LoginManagerImpl implements LoginManager {
     private SysLoginService loginService;
 
     @Override
-    public void login(AuthenticationToken token) {
+    public SysUser login(AuthenticationToken token) {
         SysUser user = null;
         if (token instanceof UsernamePasswordToken) {
             UsernamePasswordToken account = (UsernamePasswordToken) token;
@@ -77,6 +77,8 @@ public class LoginManagerImpl implements LoginManager {
         if (user != null) {
             AppThreadContext.bind(Account.from(user));
         }
+
+        return user;
     }
 
     @Override
