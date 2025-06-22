@@ -9,6 +9,8 @@
 	button{font-family: "SimSun","Helvetica Neue",Helvetica,Arial;}
 </style>
 <body class="hold-transition box box-main">
+<!--	<input id="excludeId"   name="excludeId"    type="hidden" th:value="${excludeId}"/>-->
+<!--	<input id="companyId"   name="companyId"    type="hidden" th:value="${companyId}"/>-->
 	<input id="treeId"   name="treeId"    type="hidden" th:value="${dept.deptId}"/>
 	<input id="treeName" name="treeName"  type="hidden" th:value="${dept.deptName}"/>
 	<div class="wrapper"><div class="treeShowHideButton" onclick="$.tree.toggleSearch();">
@@ -30,9 +32,10 @@
 	<script th:inline="javascript">
 	    var prefix = ctx + "system/dept"
 	    var deptId = [[${deptId}]];
+	    var companyId = [[${companyId}]];
 	    var excludeId = [[${excludeId}]];
 		$(function() {
-			var url = prefix + "/treeData/" + excludeId;
+			var url = prefix + "/treeData/" + excludeId+"/"+companyId;
 			var options = {
 		        url: url,
 		        expandLevel: 2,

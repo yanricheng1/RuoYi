@@ -11,6 +11,16 @@
 					<div class="select-list">
 						<ul>
 							<li>
+								选择企业：
+								<select id name="companyId" th:with="companyList=${companies}" required>
+									<option value="-1">--请选择企业--</option>
+									<option  th:each="company : ${companyList}"
+											 th:text="${company.name}"
+											 th:value="${company.id}"/>
+								</select>
+							</li>
+
+							<li>
 								角色名称：<input type="text" name="roleName"/>
 							</li>
 							<li>

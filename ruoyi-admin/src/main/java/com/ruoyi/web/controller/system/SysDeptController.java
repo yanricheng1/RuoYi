@@ -2,8 +2,8 @@ package com.ruoyi.web.controller.system;
 
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.annotation.RequiresPermissions;
+import com.ruoyi.common.constant.CompanyConstants;
 import com.ruoyi.common.constant.UserConstants;
-import com.ruoyi.web.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.Ztree;
 import com.ruoyi.common.core.domain.entity.SysDept;
@@ -12,6 +12,7 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.system.domain.SysCompany;
 import com.ruoyi.system.service.ISysCompanyService;
 import com.ruoyi.system.service.ISysDeptService;
+import com.ruoyi.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -53,11 +54,8 @@ public class SysDeptController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public List<SysDept> list(SysDept dept) {
-        if (dept == null || dept.getCompanyId() == null) {
-            return new ArrayList<>(0);
-        }
-
-        if (dept == null || dept.getCompanyId().intValue() == -1) {
+        if (dept == null || StringUtils.isBlank(dept.getCompanyId())
+                || StringUtils.equalsIgnoreCase(dept.getCompanyId(), CompanyConstants.ALL)) {
             return new ArrayList<>(0);
         }
 
@@ -72,10 +70,17 @@ public class SysDeptController extends BaseController {
     @GetMapping("/add/{parentId}")
     public String add(@PathVariable("parentId") Long parentId, ModelMap mmap) {
         if (!getSysUser().isAdmin()) {
-            parentId = getSysUser().getDeptId();
+            if (getSysUser().isTenantAdmin()) {
+                mmap.put("dept", deptService.selectDeptByParentId(getSysUser().getCompanyId(), parentId));
+            } else {
+                mmap.put("dept", deptService.selectDeptByParentId(getSysUser().getCompanyId(), getSysUser().getDeptId()));
+            }
+        } else {
+            mmap.put("dept", deptService.selectDeptById(parentId));
         }
-        mmap.put("dept", deptService.selectDeptById(parentId));
-        List<SysCompany> companies = companyService.selectSysCompanyList(new SysCompany());
+        SysCompany sysCompany = new SysCompany();
+        sysCompany.setTenantId(getSysUser().getTenantId());
+        List<SysCompany> companies = companyService.selectSysCompanyList(sysCompany);
         mmap.put("companies", companies == null ? new ArrayList<>(0) : companies);
         return prefix + "/add";
     }
@@ -92,6 +97,8 @@ public class SysDeptController extends BaseController {
             return error("新增部门'" + dept.getDeptName() + "'失败，部门名称已存在");
         }
         dept.setCreateBy(getLoginName());
+        dept.setTenantId(getSysUser().getTenantId());
+        dept.setCompanyId(getSysUser().getCompanyId());
         return toAjax(deptService.insertDept(dept));
     }
 
@@ -166,7 +173,9 @@ public class SysDeptController extends BaseController {
      */
     @RequiresPermissions("system:dept:list")
     @GetMapping(value = {"/selectDeptTree/{deptId}", "/selectDeptTree/{deptId}/{excludeId}"})
-    public String selectDeptTree(@PathVariable("deptId") Long deptId, @PathVariable(value = "excludeId", required = false) Long excludeId, ModelMap mmap) {
+    public String selectDeptTree(@PathVariable("deptId") Long deptId,
+                                 @PathVariable(value = "excludeId", required = false) Long excludeId,
+                                 ModelMap mmap) {
         mmap.put("dept", deptService.selectDeptById(deptId));
         mmap.put("excludeId", excludeId);
         return prefix + "/tree";
@@ -180,11 +189,18 @@ public class SysDeptController extends BaseController {
      * @param companyId 排除ID
      */
     @RequiresPermissions("system:dept:list")
-    @GetMapping(value = {"/selectCompanyDeptTree/{deptId}/{companyId}"})
+    @GetMapping(value = {"/selectCompanyDeptTree/{deptId}/{excludeId}/{companyId}"})
     public String selectCompanyDeptTree(@PathVariable("deptId") Long deptId,
-                                        @PathVariable(value = "companyId") Long companyId, ModelMap mmap) {
-        mmap.put("dept", deptService.selectDeptByParentId(companyId.toString(),deptId));
+                                        @PathVariable(value = "excludeId") Long excludeId,
+                                        @PathVariable(value = "companyId") Long companyId,
+                                        ModelMap mmap) {
+        SysDept dept = deptService.selectDeptByParentId(companyId.toString(), deptId);
+        if (dept == null) {
+            dept = deptService.selectDeptById(deptId);
+        }
+        mmap.put("dept", dept);
         mmap.put("companyId", companyId);
+        mmap.put("excludeId", excludeId);
         return prefix + "/tree";
     }
 
@@ -192,11 +208,15 @@ public class SysDeptController extends BaseController {
      * 加载部门列表树（排除下级）
      */
     @RequiresPermissions("system:dept:list")
-    @GetMapping("/treeData/{excludeId}")
+    @GetMapping(value = {"/treeData/{excludeId}", "/treeData/{excludeId}/{companyId}"})
     @ResponseBody
-    public List<Ztree> treeDataExcludeChild(@PathVariable(value = "excludeId", required = false) Long excludeId) {
+    public List<Ztree> treeDataExcludeChild(
+            @PathVariable(value = "excludeId", required = false) Long excludeId,
+            @PathVariable(value = "companyId", required = false) String companyId
+    ) {
         SysDept dept = new SysDept();
         dept.setExcludeId(excludeId);
+        dept.setCompanyId(companyId);
         List<Ztree> ztrees = deptService.selectDeptTreeExcludeChild(dept);
         return ztrees;
     }

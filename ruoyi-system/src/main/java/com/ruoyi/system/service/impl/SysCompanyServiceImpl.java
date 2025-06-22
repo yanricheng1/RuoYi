@@ -1,6 +1,8 @@
 package com.ruoyi.system.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.common.utils.context.AppThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.SysCompanyMapper;
@@ -41,6 +43,7 @@ public class SysCompanyServiceImpl implements ISysCompanyService
     @Override
     public List<SysCompany> selectSysCompanyList(SysCompany sysCompany)
     {
+        sysCompany.setTenantId(AppThreadContext.getAccount().getTenantId());
         return sysCompanyMapper.selectSysCompanyList(sysCompany);
     }
 

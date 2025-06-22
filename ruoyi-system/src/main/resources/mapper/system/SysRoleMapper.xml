@@ -40,7 +40,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="selectRoleList" parameterType="com.ruoyi.common.core.domain.entity.SysRole" resultMap="SysRoleResult">
 		<include refid="selectRoleContactVo"/>
-		where r.del_flag = '0'
+		where r.del_flag = '0' and r.type=#{type}
+
+		<if test="tenantId != null and tenantId != 0">
+			AND r.tenant_id = #{tenantId}
+		</if>
+
 		<if test="roleId != null and roleId != 0">
 			AND r.role_id = #{roleId}
 		</if>
@@ -150,6 +155,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="status != null and status != ''">status,</if>
  			<if test="remark != null and remark != ''">remark,</if>
  			<if test="createBy != null and createBy != ''">create_by,</if>
+		    <if test="tenantId != null and tenantId != ''">tenant_id,</if>
+		    <if test="type != null and type != ''">type,</if>
  			create_time
  		)values(
  			<if test="roleId != null and roleId != 0">#{roleId},</if>
@@ -160,6 +167,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="status != null and status != ''">#{status},</if>
  			<if test="remark != null and remark != ''">#{remark},</if>
  			<if test="createBy != null and createBy != ''">#{createBy},</if>
+			<if test="tenantId != null and tenantId != ''">#{tenantId},</if>
+			<if test="type != null and type != ''">#{type},</if>
  			sysdate()
  		)
 	</insert>

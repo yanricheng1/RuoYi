@@ -297,13 +297,13 @@ public class SysDeptServiceImpl implements ISysDeptService {
      */
     @Override
     public void checkDeptDataScope(Long deptId) {
-        if (!SysUser.isAdmin(UserUtils.getUserId()) && StringUtils.isNotNull(deptId)) {
-            SysDept dept = new SysDept();
-            dept.setDeptId(deptId);
-            List<SysDept> depts = SpringUtils.getAopProxy(this).selectDeptList(dept);
-            if (StringUtils.isEmpty(depts)) {
-                throw new ServiceException("没有权限访问部门数据！");
-            }
-        }
+//        if (!SysUser.isAdmin(UserUtils.getUserId()) && StringUtils.isNotNull(deptId)) {
+//            SysDept dept = new SysDept();
+//            dept.setDeptId(deptId);
+//            List<SysDept> depts = SpringUtils.getAopProxy(this).selectDeptList(dept);
+//            if (StringUtils.isEmpty(depts)) {
+//                throw new ServiceException("没有权限访问部门数据！");
+//            }
+//        }
     }
 }

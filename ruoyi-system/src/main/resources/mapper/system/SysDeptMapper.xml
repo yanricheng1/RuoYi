@@ -20,10 +20,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="createTime" column="create_time" />
 		<result property="updateBy"   column="update_by"   />
 		<result property="updateTime" column="update_time" />
+		<result property="tenantId" column="tenant_id" />
+		<result property="bizType" column="biz_type" />
+		<result property="bizId" column="biz_id" />
+		<result property="companyId" column="company_id" />
 	</resultMap>
 	
 	<sql id="selectDeptVo">
-        select d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.order_num, d.leader, d.phone, d.email, d.status, d.del_flag, d.create_by, d.create_time 
+        select d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.order_num, d.leader,
+               d.phone, d.email, d.status, d.del_flag, d.create_by, d.create_time,
+               d.tenant_id,d.biz_type,d.biz_id,d.company_id
         from sys_dept d
     </sql>
     
@@ -81,8 +87,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 	<select id="selectDeptByParentId" resultMap="SysDeptResult">
-		select d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.order_num, d.leader, d.phone, d.email, d.status,
-			   parent_dep_name parent_name
+		select d.dept_id, d.parent_id, d.ancestors, d.dept_name,
+		       d.order_num, d.leader, d.phone, d.email, d.status,
+			   (select dept_name from sys_dept where dept_id = d.parent_id) parent_name
 		from sys_dept d
 		where d.parent_id = #{parentId}
 		and  d.del_flag = '0'

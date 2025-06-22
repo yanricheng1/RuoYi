@@ -27,7 +27,7 @@ public class SysCompanyManagementImpl implements SysCompanyManagement {
         int result = sysCompanyService.insertSysCompany(sysCompany);
         SysDept dept = new SysDept();
         dept.setDeptName(sysCompany.getName());
-        dept.setCompanyId(sysCompany.getId());
+        dept.setCompanyId(String.valueOf(sysCompany.getId()));
         dept.setTenantId(sysCompany.getTenantId());
         deptService.insertDept(dept);
         return result;

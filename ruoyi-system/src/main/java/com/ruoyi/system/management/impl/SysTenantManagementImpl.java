@@ -130,29 +130,36 @@ public class SysTenantManagementImpl implements SysTenantManagement {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int insertSysTenant(SysTenant sysTenant, SysUser user) {
-        int result = sysTenantService.insertSysTenant(sysTenant);
-        SysCompany sysCompany = new SysCompany();
-        sysCompany.setCode(sysTenant.getCode());
-        sysCompany.setName(sysTenant.getName());
-        sysCompany.setTenantId(String.valueOf(sysTenant.getId()));
-        sysCompany.setFullName(sysTenant.getName());
-        sysCompany.setTaxNo(sysTenant.getTaxNo());
+    public int insertSysTenant(SysTenant tenant, SysUser user) {
+        //创建租户
+        int result = sysTenantService.insertSysTenant(tenant);
 
-        sysCompanyService.insertSysCompany(sysCompany);
+        //创建企业
+        SysCompany company = new SysCompany();
+        company.setCode(tenant.getCode());
+        company.setName(tenant.getName());
+        company.setTenantId(String.valueOf(tenant.getId()));
+        company.setFullName(tenant.getName());
+        company.setTaxNo(tenant.getTaxNo());
+        sysCompanyService.insertSysCompany(company);
+
+        //创建部门
         SysDept dept = new SysDept();
-        dept.setDeptName(sysCompany.getName());
-        dept.setCompanyId(sysCompany.getId());
-        dept.setTenantId(sysCompany.getTenantId());
+        dept.setDeptName(company.getName());
+        dept.setCompanyId(String.valueOf(company.getId()));
+        dept.setTenantId(company.getTenantId());
+        dept.setParentId(0L);
         deptService.insertDept(dept);
 
+        //修改用户信息
         SysUser modifyUser = new SysUser();
         modifyUser.setUserId(user.getUserId());
-        modifyUser.setCompanyId(String.valueOf(sysCompany.getId()));
-        modifyUser.setTenantId(sysCompany.getTenantId());
+        modifyUser.setCompanyId(String.valueOf(company.getId()));
+        modifyUser.setTenantId(company.getTenantId());
         modifyUser.setBizType(UserBizType.new_user.name());
-        user.setCompanyId(String.valueOf(sysCompany.getId()));
-        user.setTenantId(sysCompany.getTenantId());
+        user.setCompanyId(String.valueOf(company.getId()));
+        user.setTenantId(company.getTenantId());
+        modifyUser.setDeptId(dept.getDeptId());
         userService.updateUserInfo(modifyUser);
 
         SysRole role = new SysRole();

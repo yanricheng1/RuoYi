@@ -8,6 +8,7 @@ import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.UserUtils;
+import com.ruoyi.common.utils.context.AppThreadContext;
 import com.ruoyi.common.utils.spring.SpringUtils;
 import com.ruoyi.system.domain.SysRoleDept;
 import com.ruoyi.system.domain.SysRoleMenu;
@@ -62,6 +63,17 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     @DataScope(deptAlias = "d")
     public List<SysRole> selectRoleList(SysRole role) {
+        SysUser user = AppThreadContext.getAccount().toSysUser();
+        if (user.isAdmin()) {
+            role.setType(RoleType.sys.name());
+        } else if (user.isTenantAdmin()) {
+            role.setType(RoleType.tenant.name());
+            role.setTenantId(user.getTenantId());
+        } else {
+            return new ArrayList<>();
+        }
+
+
         return roleMapper.selectRoleList(role);
     }
 
@@ -165,7 +177,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
             if (countUserRoleByRoleId(roleId) > 0) {
                 throw new ServiceException(String.format("%1$s已分配,不能删除", role.getRoleName()));
             }
-            if(StringUtils.equalsIgnoreCase(role.getType(), RoleType.sys.name())){
+            if (StringUtils.equalsIgnoreCase(role.getType(), RoleType.sys.name())) {
                 throw new ServiceException(String.format("%s为系统内置角色不允许删除", role.getRoleName()));
             }
         }

@@ -1,7 +1,13 @@
 package com.ruoyi.web.controller.system;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.ruoyi.common.annotation.RequiresPermissions;
+import com.ruoyi.common.constant.CompanyConstants;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.context.AppThreadContext;
+import com.ruoyi.system.domain.SysCompany;
+import com.ruoyi.system.service.ISysCompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -34,10 +40,15 @@ public class SysPostController extends BaseController
     @Autowired
     private ISysPostService postService;
 
+    @Autowired
+    private ISysCompanyService companyService;
+
     @RequiresPermissions("system:post:view")
     @GetMapping()
-    public String operlog()
+    public String post(ModelMap mmap)
     {
+        List<SysCompany> companies = companyService.selectSysCompanyList(new SysCompany());
+        mmap.put("companies", companies);
         return prefix + "/post";
     }
 
@@ -47,6 +58,12 @@ public class SysPostController extends BaseController
     public TableDataInfo list(SysPost post)
     {
         startPage();
+
+        if (StringUtils.isBlank(post.getCompanyId())
+                || StringUtils.equalsIgnoreCase(post.getCompanyId(), CompanyConstants.ALL)) {
+            return getDataTable(new ArrayList<>());
+        }
+        post.setTenantId(AppThreadContext.getAccount().getTenantId());
         List<SysPost> list = postService.selectPostList(post);
         return getDataTable(list);
     }
@@ -76,8 +93,10 @@ public class SysPostController extends BaseController
      */
     @RequiresPermissions("system:post:add")
     @GetMapping("/add")
-    public String add()
+    public String add(ModelMap mmap)
     {
+        List<SysCompany> companies = companyService.selectSysCompanyList(new SysCompany());
+        mmap.put("companies", companies);
         return prefix + "/add";
     }
 
@@ -99,6 +118,7 @@ public class SysPostController extends BaseController
             return error("新增岗位'" + post.getPostName() + "'失败，岗位编码已存在");
         }
         post.setCreateBy(getLoginName());
+        post.setTenantId(AppThreadContext.getAccount().getTenantId());
         return toAjax(postService.insertPost(post));
     }
 

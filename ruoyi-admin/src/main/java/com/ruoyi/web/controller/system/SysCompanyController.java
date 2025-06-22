@@ -61,6 +61,7 @@ public class SysCompanyController extends BaseController {
     @ResponseBody
     public TableDataInfo list(SysCompany sysCompany) {
         startPage();
+        sysCompany.setTenantId(getSysUser().getTenantId());
         List<SysCompany> list = sysCompanyService.selectSysCompanyList(sysCompany);
         return getDataTable(list);
     }

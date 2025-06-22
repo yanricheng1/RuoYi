@@ -54,11 +54,6 @@ public class SysMenu extends BaseEntity
 
     /** 子菜单 */
     private List<SysMenu> children = new ArrayList<SysMenu>();
-
-    private String tenantId;
-    private String companyId;
-    private String bizType;
-    private String bizId;
     private String uuid;
 
     public String getUuid() {
@@ -77,38 +72,6 @@ public class SysMenu extends BaseEntity
     public void setMenuId(Long menuId)
     {
         this.menuId = menuId;
-    }
-
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
-
-    public String getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(String companyId) {
-        this.companyId = companyId;
-    }
-
-    public String getBizType() {
-        return bizType;
-    }
-
-    public void setBizType(String bizType) {
-        this.bizType = bizType;
-    }
-
-    public String getBizId() {
-        return bizId;
-    }
-
-    public void setBizId(String bizId) {
-        this.bizId = bizId;
     }
 
     @NotBlank(message = "菜单名称不能为空")

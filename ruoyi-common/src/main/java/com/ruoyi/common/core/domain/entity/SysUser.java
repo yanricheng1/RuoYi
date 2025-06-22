@@ -3,6 +3,8 @@ package com.ruoyi.common.core.domain.entity;
 import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.*;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -163,9 +165,23 @@ public class SysUser extends BaseEntity
         return isAdmin(this.userId);
     }
 
+    public boolean isTenantAdmin(){
+        return isTenantAdmin(roles);
+    }
+
     public static boolean isAdmin(Long userId)
     {
         return userId != null && 1L == userId;
+    }
+
+    public static boolean isTenantAdmin(List<SysRole> roles)
+    {
+        for(SysRole role : roles){
+            if(StringUtils.equalsIgnoreCase(role.getRoleKey(), "tenant_admin")){
+                return true;
+            }
+        }
+        return false;
     }
 
     public Long getDeptId()
