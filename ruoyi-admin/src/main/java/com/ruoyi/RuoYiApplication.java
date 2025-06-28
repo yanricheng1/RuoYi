@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
+//import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 /**
  * 启动程序
@@ -13,7 +13,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
  */
 @SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
 @EnableCaching
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 144000)
+//@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 144000)
 public class RuoYiApplication
 {
     public static void main(String[] args)

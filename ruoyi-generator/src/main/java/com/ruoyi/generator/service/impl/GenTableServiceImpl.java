@@ -11,8 +11,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
+
+import com.ruoyi.common.utils.file.FileUtil;
+import com.ruoyi.common.utils.io.IOUtil;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -243,7 +244,7 @@ public class GenTableServiceImpl implements IGenTableService
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
         generatorCode(tableName, zip);
-        IOUtils.closeQuietly(zip);
+        IOUtil.closeQuietly(zip);
         return outputStream.toByteArray();
     }
 
@@ -279,7 +280,7 @@ public class GenTableServiceImpl implements IGenTableService
                 try
                 {
                     String path = getGenPath(table, template);
-                    FileUtils.writeStringToFile(new File(path), sw.toString(), CharsetKit.UTF_8);
+                    FileUtil.writeStringToFile(new File(path), sw.toString(), CharsetKit.UTF_8);
                 }
                 catch (IOException e)
                 {
@@ -359,7 +360,7 @@ public class GenTableServiceImpl implements IGenTableService
         {
             generatorCode(tableName, zip);
         }
-        IOUtils.closeQuietly(zip);
+        IOUtil.closeQuietly(zip);
         return outputStream.toByteArray();
     }
 
@@ -391,8 +392,8 @@ public class GenTableServiceImpl implements IGenTableService
             {
                 // 添加到zip
                 zip.putNextEntry(new ZipEntry(VelocityUtils.getFileName(template, table)));
-                IOUtils.write(sw.toString(), zip, Constants.UTF8);
-                IOUtils.closeQuietly(sw);
+                IOUtil.write(sw.toString(), zip, Constants.UTF8);
+                IOUtil.closeQuietly(sw);
                 zip.flush();
                 zip.closeEntry();
             }

@@ -82,7 +82,7 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.DictUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.file.FileTypeUtils;
-import com.ruoyi.common.utils.file.FileUtils;
+import com.ruoyi.common.utils.file.FileUtil;
 import com.ruoyi.common.utils.file.ImageUtils;
 import com.ruoyi.common.utils.reflect.ReflectUtils;
 
@@ -511,7 +511,7 @@ public class ExcelUtil<T>
                             for (PictureData picture : images)
                             {
                                 byte[] data = picture.getData();
-                                String fileName = FileUtils.writeImportBytes(data);
+                                String fileName = FileUtil.writeImportBytes(data);
                                 propertyString.append(fileName).append(SEPARATOR);
                             }
                             val = StringUtils.stripEnd(propertyString.toString(), SEPARATOR);

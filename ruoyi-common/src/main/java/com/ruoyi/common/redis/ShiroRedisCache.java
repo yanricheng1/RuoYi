@@ -77,9 +77,9 @@ public class ShiroRedisCache<K, V> implements RedisCache<K, V> {
 
     @Override
     public V put(K k, V v) throws RuntimeException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("put key:{},value:{}", this.keySerializer.serialize(k), this.valueSerializer.serialize(v));
-        }
+//        if (logger.isDebugEnabled()) {
+//            logger.debug("put key:{},value:{}", this.keySerializer.serialize(k), this.valueSerializer.serialize(v));
+//        }
 
         if (k == null) {
             return v;
